@@ -1,0 +1,5 @@
+{
+    "getStash": "https://www.pathofexile.com/character-window/get-stash-items?accountName=$$ACCNAME$$&realm=pc&league=$$LEAGUE$$&tabIndex=$$TABINDEX$$&public=$$PUBLIC$$",
+    "getExchange": "https://www.pathofexile.com/api/trade/fetch/$$EXCHANGEID$$?query=$$REQUESTID$$&exchange",
+    "postExchange": "https://www.pathofexile.com/api/trade/exchange/Metamorph"
+}

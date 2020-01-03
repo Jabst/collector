@@ -1,0 +1,19 @@
+{
+    "poe_ninja": [
+        {"prophecy": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=Prophecy"},
+        {"currency": "https://poe.ninja/api/data/currencyoverview?league=Metamorph&type=Currency"},
+        {"fragment": "https://poe.ninja/api/data/currencyoverview?league=Metamorph&type=Fragment"},
+        {"watchstone": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=Watchstone"},
+        {"oil": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=Oil"},
+        {"incubator": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=Incubator"},
+        {"scarab": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=Scarab"},
+        {"fossil": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=Fossil"},
+        {"resonator": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=Resonator"},
+        {"essence": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=Essence"},
+        {"divination_card": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=DivinationCard"},
+        {"prophecy": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=Prophecy"},
+        {"unique_map": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=UniqueMap"},
+        {"unique_jewel": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=UniqueJewel"},
+        {"unique_flask": "https://poe.ninja/api/data/itemoverview?league=Metamorph&type=UniqueFlask"}
+    ]
+}
