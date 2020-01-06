@@ -3,8 +3,13 @@ package main
 import (
 	"consumer/collector/object"
 	api "consumer/collector/services"
+	"log"
 	"net/http"
 )
+
+func Printer(data []interface{}) {
+	log.Println(data[0])
+}
 
 func main() {
 
@@ -28,7 +33,11 @@ func main() {
 		panic(err)
 	}
 
-	API := api.NewAPI(accountInfo, poeAPI, ninjaDB, poeCurrencyDictionary)
+	watcher := api.InitWatcher(api.WatcherSettings{Active: true, Interval: 5, Tasks: []api.TasksBundle{}})
+
+	API := api.NewAPI(accountInfo, poeAPI, ninjaDB, poeCurrencyDictionary, watcher)
+
+	API.Watcher.StartWatcher()
 
 	/*
 
@@ -38,7 +47,7 @@ func main() {
 		}*/
 
 	http.HandleFunc("/exchange", API.GetExchange)
-	http.ListenAndServe(":8080", nil)
+	go http.ListenAndServe(":8080", nil)
 
 	return
 }

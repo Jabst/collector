@@ -2,9 +2,17 @@ package api
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 	"strings"
 )
+
+type watcherSettings struct {
+	Status    bool          `json:"enable"`
+	Interval  int           `json:"interval"`
+	Params    []interface{} `json:"params"`
+	Operation string        `json:"operation"`
+}
 
 // GetExchange fetches the data from poe api, processes it and sorts it
 func (api *API) GetExchange(w http.ResponseWriter, r *http.Request) {
@@ -32,5 +40,26 @@ func (api *API) GetExchange(w http.ResponseWriter, r *http.Request) {
 	marshalledData, err := json.Marshal(data)
 
 	w.Write(marshalledData)
+
+}
+
+func (_api *API) PostWatcher(w http.ResponseWriter, r *http.Request) {
+
+	decoder := json.NewDecoder(r.Body)
+
+	var wSettings watcherSettings
+
+	err := decoder.Decode(&wSettings)
+	if err != nil {
+		log.Println(err)
+	}
+
+	_api.Watcher.AddTask(TasksBundle{
+		Signature:        _api.ConnectorPostExchange,
+		Params:           []interface{}{wSettings.Params[0].([]string), wSettings.Params[1].([]string)},
+		ReturnStructType: "exchange",
+	})
+
+	w.Write([]byte("Task Added"))
 
 }

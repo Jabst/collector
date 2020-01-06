@@ -17,6 +17,7 @@ type API struct {
 	NinjaDB                object.NinjaDatabase
 	PoeCurrency            object.PoECurrency
 	CachedExchangeSearches []CachedExchangeSearch
+	Watcher                WatcherSettings
 }
 
 type CachedExchangeSearch struct {
@@ -30,13 +31,14 @@ type ExchangeResponse struct {
 	Total     int64    `json:"total"`
 }
 
-func NewAPI(accounts object.TrackAccounts, poeAPI object.PoEAPIGateway, ninjaDB object.NinjaDatabase, poeCurrencyDictionary object.PoECurrency) API {
+func NewAPI(accounts object.TrackAccounts, poeAPI object.PoEAPIGateway, ninjaDB object.NinjaDatabase, poeCurrencyDictionary object.PoECurrency, wSettings WatcherSettings) API {
 	return API{
 		Accounts:               accounts,
 		PoeAPI:                 poeAPI,
 		NinjaDB:                ninjaDB,
 		PoeCurrency:            poeCurrencyDictionary,
 		CachedExchangeSearches: make([]CachedExchangeSearch, 0),
+		Watcher:                wSettings,
 	}
 }
 
