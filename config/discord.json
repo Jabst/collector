@@ -1,0 +1,8 @@
+{
+    "discord_bots": [
+        {
+            "name": "JohnLad-Bot",
+            "address": "localhost:8080"
+        }
+    ]
+}

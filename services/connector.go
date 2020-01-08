@@ -2,14 +2,21 @@ package api
 
 import (
 	model "consumer/collector/models"
-	"log"
 )
 
-func (api *API) ConnectorPostExchange(params []interface{}) (interface{}, error) {
+func (api *API) ConnectorPostExchange(params [][]interface{}) (interface{}, error) {
 
-	log.Println(params)
+	var x [][]string = make([][]string, len(params))
+
+	for idx, elem := range params {
+		x[idx] = make([]string, 0)
+		for _, e := range elem {
+			x[idx] = append(x[idx], e.(string))
+		}
+	}
+
 	// TODO adicionar verificaçoes
-	resultExchangeData, err := api.PostExchange(params[0].([]string), params[1].([]string))
+	resultExchangeData, err := api.PostExchange(x[0], x[1])
 	if err != nil {
 		return model.ResultExchangeData{}, err
 	}

@@ -27,7 +27,7 @@ type Dictionary struct {
 }
 
 type NinjaDatabase struct {
-	Products   Resources
+	Products   Target
 	Dictionary Dictionary
 }
 
@@ -98,7 +98,7 @@ func InitializeInMemory() (NinjaDatabase, error) {
 	}
 
 	return NinjaDatabase{
-		Products:   values,
+		Products:   products,
 		Dictionary: dictionary,
 	}, nil
 }

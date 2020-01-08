@@ -2,6 +2,7 @@ package api
 
 import (
 	model "consumer/collector/models"
+	"encoding/json"
 	"fmt"
 	"log"
 	"time"
@@ -9,7 +10,7 @@ import (
 
 type TasksBundle struct {
 	Signature        interface{}
-	Params           []interface{}
+	Params           [][]interface{}
 	ReturnStructType string
 }
 
@@ -35,23 +36,26 @@ func (watcher *WatcherSettings) UpdateWatcher(settings WatcherSettings) {
 	watcher.Interval = settings.Interval
 }
 
-func (watcher *WatcherSettings) StartWatcher() {
-	for watcher.Active {
-		log.Println(fmt.Sprintf("Starting watcher with %d as interval", watcher.Interval))
-		for index := range watcher.Tasks {
-			retVal, _ := watcher.Tasks[index].Signature.(func([]interface{}) (interface{}, error))(watcher.Tasks[index].Params)
+func (api *API) StartWatcher() {
+	for api.Watcher.Active {
+		log.Println(fmt.Sprintf("Starting watcher with %d seconds interval", api.Watcher.Interval))
+		for index := range api.Watcher.Tasks {
+			log.Println(fmt.Sprintf("Working on task #%d", index))
+			retVal, _ := api.Watcher.Tasks[index].Signature.(func([][]interface{}) (interface{}, error))(api.Watcher.Tasks[index].Params)
 
-			switch watcher.Tasks[index].ReturnStructType {
+			switch api.Watcher.Tasks[index].ReturnStructType {
 			case "exchange":
 				value := retVal.(model.ResultExchangeData)
 
-				log.Println(value.ResultData[0].ID)
-
+				filteredData := api.EvaluateExchangeData(value, api.NinjaDB.Products)
+				byteValueData, err := json.Marshal(filteredData)
+				if err != nil {
+					panic(err)
+				}
+				api.ShipData(byteValueData)
 			}
-			log.Println(watcher.Tasks[index].Signature)
-
 		}
-		log.Println(fmt.Sprintf("sleeping for: %d", watcher.Interval))
-		time.Sleep(time.Duration(watcher.Interval) * time.Second)
+		log.Println(fmt.Sprintf("sleeping for: %d", api.Watcher.Interval))
+		time.Sleep(time.Duration(api.Watcher.Interval) * time.Second)
 	}
 }

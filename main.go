@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+const secondsIn5Minute = 5
+
 func Printer(data []interface{}) {
 	log.Println(data[0])
 }
@@ -33,21 +35,20 @@ func main() {
 		panic(err)
 	}
 
-	watcher := api.InitWatcher(api.WatcherSettings{Active: true, Interval: 5, Tasks: []api.TasksBundle{}})
+	discordBots, err := object.InitializeDiscordBots()
+	if err != nil {
+		panic(err)
+	}
 
-	API := api.NewAPI(accountInfo, poeAPI, ninjaDB, poeCurrencyDictionary, watcher)
+	watcher := api.InitWatcher(api.WatcherSettings{Active: true, Interval: secondsIn5Minute, Tasks: []api.TasksBundle{}})
 
-	API.Watcher.StartWatcher()
+	API := api.NewAPI(accountInfo, poeAPI, ninjaDB, poeCurrencyDictionary, discordBots, watcher)
 
-	/*
-
-		err = API.DumpData()
-		if err != nil {
-			panic(err)
-		}*/
+	go API.StartWatcher()
 
 	http.HandleFunc("/exchange", API.GetExchange)
-	go http.ListenAndServe(":8080", nil)
+	http.HandleFunc("/task", API.PostWatcher)
+	http.ListenAndServe(":8080", nil)
 
 	return
 }

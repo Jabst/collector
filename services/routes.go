@@ -8,10 +8,10 @@ import (
 )
 
 type watcherSettings struct {
-	Status    bool          `json:"enable"`
-	Interval  int           `json:"interval"`
-	Params    []interface{} `json:"params"`
-	Operation string        `json:"operation"`
+	Status    bool            `json:"enable"`
+	Interval  int             `json:"interval"`
+	Params    [][]interface{} `json:"params"`
+	Operation string          `json:"operation"`
 }
 
 // GetExchange fetches the data from poe api, processes it and sorts it
@@ -54,10 +54,14 @@ func (_api *API) PostWatcher(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 
+	log.Println(wSettings.Params)
+
+	_api.Watcher.UpdateWatcher(WatcherSettings{Active: wSettings.Status, Interval: wSettings.Interval, Tasks: []TasksBundle{}})
+
 	_api.Watcher.AddTask(TasksBundle{
 		Signature:        _api.ConnectorPostExchange,
-		Params:           []interface{}{wSettings.Params[0].([]string), wSettings.Params[1].([]string)},
-		ReturnStructType: "exchange",
+		Params:           wSettings.Params,
+		ReturnStructType: wSettings.Operation,
 	})
 
 	w.Write([]byte("Task Added"))
